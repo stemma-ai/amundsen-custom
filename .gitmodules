@@ -1,0 +1,12 @@
+[submodule "search/upstream"]
+	path = search/upstream
+	url = https://github.com/amundsen-io/amundsensearchlibrary.git
+[submodule "metadata/upstream"]
+	path = metadata/upstream
+	url = https://github.com/amundsen-io/amundsenmetadatalibrary.git
+[submodule "frontend/upstream"]
+	path = frontend/upstream
+	url = https://github.com/amundsen-io/amundsenfrontendlibrary.git
+[submodule "databuilder/upstream"]
+	path = databuilder/upstream
+	url = https://github.com/amundsen-io/amundsendatabuilder.git

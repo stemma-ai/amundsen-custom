@@ -3,18 +3,18 @@
 ## Bootstrap a default version of Amundsen using Docker
 The following instructions are for setting up a version of Amundsen using Docker.
 
-1. Make sure you have at least 3GB available to docker. Install `docker` and  `docker-compose`.
-2. Clone [this repo](https://github.com/stemma-ai/amundsen-custom) and its submodules by running:
+1. Create a [private fork](https://gist.github.com/0xjac/85097472043b697ab57ba1b1c7530274) of this repo.
+1. Clone your fork [this repo](https://github.com/stemma-ai/amundsen-custom) and its submodules by running:
    ```bash
    $ git clone --recursive git@github.com:stemma-ai/amundsen-custom.git
    ```
-3. Enter the cloned directory and run:
+1. Make sure you have at least 3GB available to docker. Install `docker` and  `docker-compose`.
+1. Enter the cloned directory and run:
     ```bash
     # For Neo4j Backend
     $ docker-compose -f docker-compose.yml up
     ```
 4. Ingest provided sample data into Neo4j by doing the following: _(Please skip if you are using Atlas backend)_
-
    * In a separate terminal window, change directory to the [databuilder/upstream](https://github.com/amundsen-io/amundsendatabuilder) submodule.
    * `sample_data_loader` python script included in `examples/` directory uses _elasticsearch client_, _pyhocon_ and other libraries. Install the dependencies in a virtual env and run the script by following the commands below:
    ```bash

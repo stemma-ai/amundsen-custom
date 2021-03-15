@@ -1,7 +1,7 @@
 # Installation
 
 ## Bootstrap a default version of Amundsen using Docker
-The following instructions are for setting up a version of Amundsen using Docker.
+The following instructions are for setting up a version of Amundsen using Docker, backed by Neo4j and Elasticsearch.
 
 1. Create a [private fork](https://gist.github.com/0xjac/85097472043b697ab57ba1b1c7530274) of this repo.
 1. Clone your fork [this repo](https://github.com/stemma-ai/amundsen-custom) and its submodules by running:
@@ -14,9 +14,9 @@ The following instructions are for setting up a version of Amundsen using Docker
     # For Neo4j Backend
     $ docker-compose -f docker-compose.yml up
     ```
-4. Ingest provided sample data into Neo4j by doing the following: _(Please skip if you are using Atlas backend)_
+1. Ingest provided sample data into Neo4j:
    * In a separate terminal window, change directory to the [databuilder/upstream](https://github.com/amundsen-io/amundsendatabuilder) submodule.
-   * `sample_data_loader` python script included in `examples/` directory uses _elasticsearch client_, _pyhocon_ and other libraries. Install the dependencies in a virtual env and run the script by following the commands below:
+   * The `sample_data_loader.py` Python script included in `examples/` directory uses _elasticsearch client_, _pyhocon_ and other libraries. Install the dependencies in a virtual env and run the script by following the commands below:
    ```bash
     $ python3 -m venv venv
     $ source venv/bin/activate
@@ -25,16 +25,7 @@ The following instructions are for setting up a version of Amundsen using Docker
     $ python3 setup.py install
     $ python3 example/scripts/sample_data_loader.py
    ```
-5. View UI at [`http://localhost:5000`](http://localhost:5000) and try to search `test`, it should return some result.
-![](img/search-page.png)
-
-6. We could also do an exact matched search for table entity. For example: search `test_table1` in table field and 
-it return the records that matched.
-![](img/search-exact-match.png)
-
-**Atlas Note:** Atlas takes some time to boot properly. So you may not be able to see the results immediately 
-after `docker-compose up` command. 
-Atlas would be ready once you'll have the following output in the docker output `Amundsen Entity Definitions Created...`  
+1. View UI at [`http://localhost:5000`](http://localhost:5000) and try to search `test`, it should return some results.
 
 ### Verify setup
 
@@ -55,18 +46,11 @@ Atlas would be ready once you'll have the following output in the docker output 
       2. Make entry `vm.max_map_count=262144`. Save and exit.
       3. Reload settings `$ sysctl -p`
       4. Restart `docker-compose`
-      
-2. If `docker-amundsen-local.yml` stops because of `org.elasticsearch.bootstrap.StartupException: java.lang.IllegalStateException: Failed to create node environment`, then `es_amundsen` [cannot write](https://discuss.elastic.co/t/elastic-elasticsearch-docker-not-assigning-permissions-to-data-directory-on-run/65812/4) to `.local/elasticsearch`. 
+
+2. If `docker-amundsen-local.yml` stops because of `org.elasticsearch.bootstrap.StartupException: java.lang.IllegalStateException: Failed to create node environment`, then `es_amundsen` [cannot write](https://discuss.elastic.co/t/elastic-elasticsearch-docker-not-assigning-permissions-to-data-directory-on-run/65812/4) to `.local/elasticsearch`.
    1. `chown -R 1000:1000 .local/elasticsearch`
-   2. Restart `docker-compose` 
-3. If when running the sample data loader you recieve a connection error related to ElasticSearch or like this for Neo4j:
-```
-    Traceback (most recent call last):
-      File "/home/ubuntu/amundsen/amundsendatabuilder/venv/lib/python3.6/site-packages/neobolt/direct.py", line 831, in _connect
-        s.connect(resolved_address)
-    ConnectionRefusedError: [Errno 111] Connection refused
-```
-4. If `elastic search` container stops with an error `max file descriptors [4096] for elasticsearch process is too low, increase to at least [65535]`, then add the below code to the file `docker-amundsen-local.yml` in the `elasticsearch` definition.
+   2. Restart `docker-compose` ```
+   3. If `elastic search` container stops with an error `max file descriptors [4096] for elasticsearch process is too low, increase to at least [65535]`, then add the below code to the file `docker-amundsen-local.yml` in the `elasticsearch` definition.
 ```
  ulimits:
    nofile:

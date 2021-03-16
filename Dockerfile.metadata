@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3.7
 
 ENV LANG="en_US.utf8" \
     AMUNDSEN_SERVICE_NAME="metadata"

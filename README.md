@@ -11,7 +11,7 @@ The following instructions are for setting up a version of Amundsen using Docker
 1. Install `docker` and  `docker-compose`. *Allocate at least 3GB available to Docker.*
 1. Enter the cloned directory and run:
     ```bash
-    docker-compose -f docker-compose.yml up
+    docker-compose up --abort-on-container-exit
     ```
 1. Ingest static sample data into Neo4j:
    * In a separate terminal window, `cd` to the [databuilder/upstream](https://github.com/amundsen-io/amundsendatabuilder) submodule.

@@ -8,14 +8,13 @@ The following instructions are for setting up a version of Amundsen using Docker
    ```bash
    git clone --recursive git@github.com:stemma-ai/amundsen-custom.git
    ```
-1. Make sure you have at least 3GB available to docker. Install `docker` and  `docker-compose`.
+1. Install `docker` and  `docker-compose`. *Allocate at least 3GB available to Docker.*
 1. Enter the cloned directory and run:
     ```bash
-    # For Neo4j Backend
     docker-compose -f docker-compose.yml up
     ```
-1. Ingest provided sample data into Neo4j:
-   * In a separate terminal window, change directory to the [databuilder/upstream](https://github.com/amundsen-io/amundsendatabuilder) submodule.
+1. Ingest static sample data into Neo4j:
+   * In a separate terminal window, `cd` to the [databuilder/upstream](https://github.com/amundsen-io/amundsendatabuilder) submodule.
    * The `sample_data_loader.py` Python script included in `examples/` directory uses _elasticsearch client_, _pyhocon_ and other libraries. Install the dependencies in a virtual env and run the script by following the commands below:
    ```bash
     python3 -m venv venv
@@ -37,16 +36,18 @@ The following instructions are for setting up a version of Amundsen using Docker
    1. [`http://localhost:5000/table_detail/gold/hive/test_schema/test_table1`](http://localhost:5000/table_detail/gold/hive/test_schema/test_table1)
    2. [`http://localhost:5000/table_detail/gold/dynamo/test_schema/test_table2`](http://localhost:5000/table_detail/gold/dynamo/test_schema/test_table2)
 
-### Troubleshooting
 
+### Troubleshooting
 1. If the Docker Container doesn't have enough heap memory for Elastic Search, `es_amundsen` will with the error `es_amundsen | [1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
    1. Increase the Heap memory in the host machine. In Linux, that means modifying your own machine. For Mac, that means modifying the Docker for Mac configuration. [See these detailed instructions from Elastic](https://www.elastic.co/guide/en/elasticsearch/reference/7.1/docker.html#docker-cli-run-prod-mode).
    2. Re-run `docker-compose`
 
-2. If `docker-compose` stops because of `org.elasticsearch.bootstrap.StartupException: java.lang.IllegalStateException: Failed to create node environment`, then `es_amundsen` [cannot write](https://discuss.elastic.co/t/elastic-elasticsearch-docker-not-assigning-permissions-to-data-directory-on-run/65812/4) to `.local/elasticsearch`. There is a file share mount established, so run this in your terminal:
+2. If `docker-compose` stops with a `org.elasticsearch.bootstrap.StartupException: java.lang.IllegalStateException: Failed to create node environment` message, then `es_amundsen` [cannot write](https://discuss.elastic.co/t/elastic-elasticsearch-docker-not-assigning-permissions-to-data-directory-on-run/65812/4) to `.local/elasticsearch`. There is a file share mount established between the Docker container and your host machine, so run this in your terminal:
    1. `chown -R 1000:1000 .local/elasticsearch`
    2. Re-reun `docker-compose`
 
-Then check if all 5 Amundsen related containers are running with `docker ps`? Can you connect to the Neo4j UI at http://localhost:7474/browser/ and similarly the raw ES API at http://localhost:9200? Does Docker logs reveal any serious issues?
+3. If ES container crashed with Docker error 137 on the first call from the website (http://localhost:5000/), this is because you are using the default Docker engine memory allocation of 2GB. The minimum needed for all the containers to run with the loaded sample data is 3GB. To do this go to your `Docker -> Preferences -> Resources -> Advanced` and increase the `Memory`, then restart the Docker engine.
 
-5. If ES container crashed with Docker error 137 on the first call from the website (http://localhost:5000/), this is because you are using the default Docker engine memory allocation of 2GB. The minimum needed for all the containers to run with the loaded sample data is 3GB. To do this go to your `Docker -> Preferences -> Resources -> Advanced` and increase the `Memory`, then restart the Docker engine.
+4. Check if all 5 Amundsen related containers are running with `docker ps`? Can you connect to the Neo4j UI at http://localhost:7474/browser/ and similarly the raw ES API at http://localhost:9200? Does Docker logs reveal any notable issues?
+
+5. [Report the issue](https://github.com/stemma-ai/amundsen-custom/issues) on this repo. The standard instructions should Just Work for everyone, and we'll gladly help get your install working!

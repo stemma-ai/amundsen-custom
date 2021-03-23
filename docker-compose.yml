@@ -59,9 +59,6 @@ services:
   amundsenfrontend:
       build:
         context: .
-        args:
-          SEARCHSERVICE_BASE: http://amundsensearch:5001
-          METADATASERVICE_BASE: http://amundsenmetadata:5002
         dockerfile: Dockerfile.frontend
       container_name: amundsenfrontend
       depends_on:

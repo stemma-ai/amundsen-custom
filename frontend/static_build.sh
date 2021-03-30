@@ -1,15 +1,5 @@
 #!/bin/bash
-#######################################
-# Validate status code. If status is not 0, it will exit with status code
-#######################################
-validate_status_code() {
-    status_code=$?
-    if [[ ${status_code} -ne 0 ]]; then
-        echo "Failed bash command: $1"
-        exit ${status_code}
-    fi
-}
-
+set -e
 print_usage() {
     echo "static_build.sh [Options]"
     echo "    Combines static resources from upstream/amundsen_application/static and frontend/configs/static by copying all"
@@ -34,11 +24,9 @@ echo "Installing Node modules in ${destination}"
 pushd ${destination} || exit
 
 npm install
-validate_status_code "npm install"
 npm rebuild node-sass
 
 echo "Running Webpack Build in Production Mode"
 npm run build
-validate_status_code "npm run build"
 
 popd || exit

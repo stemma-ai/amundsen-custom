@@ -12,8 +12,8 @@ ENV LANG="en_US.utf8" \
 ENV GUNICORN_CMD_ARGS="--bind=${GUNICORN_BIND} --timeout=${GUNICORN_TIMEOUT} --workers=${GUNICORN_WORKERS} --access-logfile - -"
 
 # Copy only what's necessary for the install first
-COPY upstream /usr/local/amundsen/search/upstream
-COPY requirements.txt /usr/local/amundsen/search/
+COPY amundsen/search /usr/local/amundsen/search/upstream
+COPY search/requirements.txt /usr/local/amundsen/search/
 WORKDIR /usr/local/amundsen/search/
 
 # Install the local copy of upstream
@@ -22,8 +22,8 @@ RUN pip install upstream/ && \
     pip install -r requirements.txt
 
 # Copy the other commonly edited files
-COPY configs configs/
-COPY wsgi.py .
+COPY search/configs configs/
+COPY search/wsgi.py .
 
 EXPOSE 5001
 

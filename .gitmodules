@@ -1,0 +1,3 @@
+[submodule "amundsen"]
+	path = amundsen
+	url = git@github.com:amundsen-io/amundsen.git
